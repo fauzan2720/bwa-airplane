@@ -1,0 +1,52 @@
+import 'package:airplane/core.dart';
+import 'package:flutter/material.dart';
+
+class BookingDetailItem extends StatelessWidget {
+  const BookingDetailItem({
+    super.key,
+    required this.title,
+    required this.value,
+    this.valueColor,
+  });
+  final String title;
+  final String value;
+  final Color? valueColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Image.asset(
+                iconCheck,
+                color: primaryColor,
+                width: 16.0,
+                height: 16.0,
+              ),
+              const SizedBox(
+                width: 6.0,
+              ),
+              Text(
+                title,
+                style: TextStyle(
+                  color: darkColor,
+                ),
+              ),
+            ],
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              fontWeight: semibold,
+              color: valueColor ?? darkColor,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
