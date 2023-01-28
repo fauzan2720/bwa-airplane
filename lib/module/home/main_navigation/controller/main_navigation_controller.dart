@@ -6,8 +6,6 @@ class MainNavigationController extends State<MainNavigationView>
   static late MainNavigationController instance;
   late MainNavigationView view;
 
-  int currentIndex = 0;
-
   @override
   void initState() {
     instance = this;
@@ -17,22 +15,16 @@ class MainNavigationController extends State<MainNavigationView>
   @override
   void dispose() => super.dispose();
 
-  handleBody() {
+  handleBody(int currentIndex) {
     switch (currentIndex) {
       case 0:
         return const HomeView();
       case 1:
-        return const Center(
-          child: Text("No Data"),
-        );
+        return const TransactionView();
       case 2:
-        return const Center(
-          child: Text("No Card"),
-        );
+        return const MyCardView();
       case 3:
-        return const Center(
-          child: Text("Settings"),
-        );
+        return const SettingView();
       default:
         return const HomeView();
     }

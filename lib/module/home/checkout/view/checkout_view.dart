@@ -1,8 +1,12 @@
+import 'package:airplane/cubit/auth_cubit.dart';
+import 'package:airplane/cubit/transaction_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:airplane/core.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CheckoutView extends StatefulWidget {
-  const CheckoutView({Key? key}) : super(key: key);
+  const CheckoutView(this.transaction, {Key? key}) : super(key: key);
+  final TransactionModel transaction;
 
   Widget build(context, CheckoutController controller) {
     controller.view = this;
@@ -16,7 +20,7 @@ class CheckoutView extends StatefulWidget {
               // ROUTE
               Image.asset(
                 imageCheckout,
-                width: Get.width,
+                width: Get.width - 80.0,
               ),
               const SizedBox(
                 height: 10.0,
@@ -87,7 +91,7 @@ class CheckoutView extends StatefulWidget {
                         ClipRRect(
                           borderRadius: radiusPrimary,
                           child: Image.network(
-                            "https://picsum.photos/1000",
+                            transaction.destination.imageUrl!,
                             width: 70.0,
                             height: 70.0,
                             fit: BoxFit.fill,
@@ -99,7 +103,7 @@ class CheckoutView extends StatefulWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Danau Beratan",
+                                transaction.destination.name!,
                                 style: TextStyle(
                                   fontSize: 18.0,
                                   fontWeight: medium,
@@ -110,7 +114,7 @@ class CheckoutView extends StatefulWidget {
                                 height: 6.0,
                               ),
                               Text(
-                                "Singajara",
+                                transaction.destination.city!,
                                 style: TextStyle(
                                   fontWeight: light,
                                   color: secondaryColor,
@@ -128,7 +132,7 @@ class CheckoutView extends StatefulWidget {
                               size: 24.0,
                             ),
                             Text(
-                              "4.8",
+                              transaction.destination.rating.toString(),
                               style: TextStyle(
                                 fontWeight: medium,
                                 color: darkColor,
@@ -151,35 +155,40 @@ class CheckoutView extends StatefulWidget {
                         fontWeight: semibold,
                       ),
                     ),
-                    const BookingDetailItem(
+                    BookingDetailItem(
                       title: "Traveler",
-                      value: "2 person",
+                      value: "${transaction.amountOfTraveler} person",
                     ),
-                    const BookingDetailItem(
+                    BookingDetailItem(
                       title: "Seat",
-                      value: "A3, B3",
+                      value: transaction.selectedSeats,
                     ),
-                    const BookingDetailItem(
+                    BookingDetailItem(
                       title: "Insurance",
-                      value: "YES",
-                      valueColor: Color(0xff0EC3AE),
+                      value: transaction.insurance ? "YES" : "NO",
+                      valueColor: transaction.insurance
+                          ? const Color(0xff0EC3AE)
+                          : const Color(0xffEB70A5),
                     ),
-                    const BookingDetailItem(
+                    BookingDetailItem(
                       title: "Refundable",
-                      value: "NO",
-                      valueColor: Color(0xffEB70A5),
+                      value: transaction.refundable ? "YES" : "NO",
+                      valueColor: transaction.refundable
+                          ? const Color(0xff0EC3AE)
+                          : const Color(0xffEB70A5),
                     ),
-                    const BookingDetailItem(
+                    BookingDetailItem(
                       title: "VAT",
-                      value: "45%",
+                      value: "${(transaction.vat * 100).toInt()}%",
                     ),
                     BookingDetailItem(
                       title: "Price",
-                      value: CurrencyFormat.convertToIdr(8500290, 0),
+                      value: CurrencyFormat.convertToIdr(transaction.price, 0),
                     ),
                     BookingDetailItem(
                       title: "Grand Total",
-                      value: CurrencyFormat.convertToIdr(12000000, 0),
+                      value: CurrencyFormat.convertToIdr(
+                          transaction.grandTotal, 0),
                       valueColor: primaryColor,
                     ),
                   ],
@@ -255,28 +264,35 @@ class CheckoutView extends StatefulWidget {
                         const SizedBox(
                           width: 16.0,
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              CurrencyFormat.convertToIdr(80400000, 0),
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: medium,
-                                color: darkColor,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 5.0,
-                            ),
-                            Text(
-                              "Current Balance",
-                              style: TextStyle(
-                                fontWeight: light,
-                                color: secondaryColor,
-                              ),
-                            ),
-                          ],
+                        BlocBuilder<AuthCubit, AuthState>(
+                          builder: (context, state) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                state is AuthSuccess
+                                    ? Text(
+                                        CurrencyFormat.convertToIdr(
+                                            state.user.balance, 0),
+                                        style: TextStyle(
+                                          fontSize: 18.0,
+                                          fontWeight: medium,
+                                          color: darkColor,
+                                        ),
+                                      )
+                                    : const SizedBox(),
+                                const SizedBox(
+                                  height: 5.0,
+                                ),
+                                Text(
+                                  "Current Balance",
+                                  style: TextStyle(
+                                    fontWeight: light,
+                                    color: secondaryColor,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
                         )
                       ],
                     ),
@@ -288,9 +304,31 @@ class CheckoutView extends StatefulWidget {
               const SizedBox(
                 height: 30.0,
               ),
-              FozPrimaryButton(
-                label: "Pay Now",
-                onPressed: () => Get.put(const CheckoutSuccessView()),
+              BlocConsumer<TransactionCubit, TransactionState>(
+                listener: (context, state) {
+                  if (state is TransactionSuccess) {
+                    Get.put(const CheckoutSuccessView());
+                    showSuccess();
+                  } else if (state is TransactionFailed) {
+                    showError(message: state.error);
+                  }
+                },
+                builder: (context, state) {
+                  if (state is TransactionLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  return FozPrimaryButton(
+                    label: "Pay Now",
+                    onPressed: () {
+                      context
+                          .read<TransactionCubit>()
+                          .createTransaction(transaction);
+                    },
+                  );
+                },
               ),
               const SizedBox(
                 height: 30.0,

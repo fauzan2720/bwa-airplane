@@ -2,12 +2,13 @@ import 'package:airplane/core.dart';
 import 'package:flutter/material.dart';
 
 class PopularDestinationCard extends StatelessWidget {
-  const PopularDestinationCard({super.key});
+  const PopularDestinationCard(this.destination, {super.key});
+  final DestinationModel destination;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Get.to(const DetailDestinationView()),
+      onTap: () => Get.to(DetailDestinationView(destination)),
       child: Container(
         margin: primaryHorizontalSize / 2,
         width: 200.0,
@@ -24,8 +25,8 @@ class PopularDestinationCard extends StatelessWidget {
               height: 220.0,
               decoration: BoxDecoration(
                 borderRadius: radiusPrimary,
-                image: const DecorationImage(
-                  image: NetworkImage("https://picsum.photos/1000"),
+                image: DecorationImage(
+                  image: NetworkImage(destination.imageUrl!),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -49,7 +50,7 @@ class PopularDestinationCard extends StatelessWidget {
                         size: 24.0,
                       ),
                       Text(
-                        "4.8",
+                        destination.rating.toString(),
                         style: TextStyle(
                           fontWeight: medium,
                           color: darkColor,
@@ -66,18 +67,19 @@ class PopularDestinationCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Lake Ciliwung",
+                    destination.name!,
                     style: TextStyle(
                       fontSize: 18.0,
                       color: darkColor,
                       fontWeight: medium,
                     ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(
                     height: 5.0,
                   ),
                   Text(
-                    "Tangerang",
+                    destination.city!,
                     style: TextStyle(
                       color: secondaryColor,
                       fontWeight: light,

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:airplane/core.dart';
 
 class DetailDestinationView extends StatefulWidget {
-  const DetailDestinationView({Key? key}) : super(key: key);
+  const DetailDestinationView(this.destination, {Key? key}) : super(key: key);
+  final DestinationModel destination;
 
   Widget build(context, DetailDestinationController controller) {
     controller.view = this;
@@ -12,7 +13,7 @@ class DetailDestinationView extends StatefulWidget {
         child: Stack(
           children: [
             Image.network(
-              "https://picsum.photos/1000",
+              destination.imageUrl!,
               width: Get.width,
               height: 450.0,
               fit: BoxFit.cover,
@@ -41,7 +42,7 @@ class DetailDestinationView extends StatefulWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Lake Ciliwung",
+                            destination.name!,
                             style: TextStyle(
                               fontSize: 24.0,
                               fontWeight: semibold,
@@ -49,7 +50,7 @@ class DetailDestinationView extends StatefulWidget {
                             ),
                           ),
                           Text(
-                            "Tangerang",
+                            destination.city!,
                             style: TextStyle(
                               fontSize: 16.0,
                               fontWeight: light,
@@ -67,7 +68,7 @@ class DetailDestinationView extends StatefulWidget {
                             size: 24.0,
                           ),
                           Text(
-                            "4.8",
+                            "${destination.rating}",
                             style: TextStyle(
                               fontWeight: medium,
                               color: whiteColor,
@@ -106,7 +107,7 @@ class DetailDestinationView extends StatefulWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0),
                           child: Text(
-                            "Berada di jalur jalan provinsi yang menghubungkan Denpasar Singaraja serta letaknya yang dekat dengan Kebun Raya Eka Karya menjadikan tempat Bali.",
+                            destination.about!,
                             style: TextStyle(color: darkColor),
                           ),
                         ),
@@ -134,40 +135,27 @@ class DetailDestinationView extends StatefulWidget {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 20.0 - 8.0),
                             child: Row(
-                              children: [
-                                InkWell(
-                                  onTap: () => Get.to(const PhotoViewWidget()),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
-                                    child: ClipRRect(
-                                      borderRadius: radiusPrimary,
-                                      child: Image.network(
-                                        "https://picsum.photos/1000",
-                                        width: 70.0,
-                                        height: 70.0,
-                                        fit: BoxFit.cover,
+                              children: destination.photos!
+                                  .map(
+                                    (e) => InkWell(
+                                      onTap: () => Get.to(
+                                          PhotoViewWidget(destination.photos!)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        child: ClipRRect(
+                                          borderRadius: radiusPrimary,
+                                          child: Image.network(
+                                            e,
+                                            width: 70.0,
+                                            height: 70.0,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () => Get.to(const PhotoViewWidget()),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
-                                    child: ClipRRect(
-                                      borderRadius: radiusPrimary,
-                                      child: Image.network(
-                                        "https://i.ibb.co/PGv8ZzG/me.jpg",
-                                        width: 70.0,
-                                        height: 70.0,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                                  )
+                                  .toList(),
                             ),
                           ),
                         ),
@@ -188,25 +176,34 @@ class DetailDestinationView extends StatefulWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0),
                           child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Flexible(
                                 flex: 1,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    interestItem(label: "Kids Park"),
-                                    interestItem(label: "City Museum"),
-                                  ],
+                                  children: destination.interests!
+                                      .map((e) =>
+                                          destination.interests!.indexOf(e) %
+                                                      2 ==
+                                                  0
+                                              ? interestItem(label: e)
+                                              : const SizedBox())
+                                      .toList(),
                                 ),
                               ),
                               Flexible(
                                 flex: 1,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    interestItem(label: "Honor Bridge"),
-                                    interestItem(label: "Central Mall"),
-                                  ],
+                                  children: destination.interests!
+                                      .map((e) =>
+                                          destination.interests!.indexOf(e) %
+                                                      2 ==
+                                                  1
+                                              ? interestItem(label: e)
+                                              : const SizedBox())
+                                      .toList(),
                                 ),
                               ),
                             ],
@@ -227,7 +224,7 @@ class DetailDestinationView extends StatefulWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            CurrencyFormat.convertToIdr(250000000, 0),
+                            CurrencyFormat.convertToIdr(destination.price, 0),
                             style: TextStyle(
                               fontSize: 18.0,
                               fontWeight: medium,
@@ -248,7 +245,7 @@ class DetailDestinationView extends StatefulWidget {
                       ),
                       FozPrimaryButton(
                         label: "Book Now",
-                        onPressed: () => Get.to(const ChooseSeatView()),
+                        onPressed: () => Get.to(ChooseSeatView(destination)),
                         width: (Get.width / 2) - 24.0,
                       ),
                     ],

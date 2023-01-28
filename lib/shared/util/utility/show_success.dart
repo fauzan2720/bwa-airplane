@@ -6,5 +6,6 @@ void showSuccess({String? message}) {
     context: Get.currentContext,
     type: QuickAlertType.success,
     text: message ?? "Berhasil",
+    confirmBtnColor: primaryColor,
   );
 }

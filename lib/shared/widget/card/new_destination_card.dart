@@ -2,12 +2,13 @@ import 'package:airplane/core.dart';
 import 'package:flutter/material.dart';
 
 class NewDestinationCard extends StatelessWidget {
-  const NewDestinationCard({super.key});
+  const NewDestinationCard(this.destination, {super.key});
+  final DestinationModel destination;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Get.to(const DetailDestinationView()),
+      onTap: () => Get.to(DetailDestinationView(destination)),
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: horizontalSize, vertical: 8.0),
         padding: const EdgeInsets.all(10.0),
@@ -21,7 +22,7 @@ class NewDestinationCard extends StatelessWidget {
             ClipRRect(
               borderRadius: radiusPrimary,
               child: Image.network(
-                "https://picsum.photos/1000",
+                destination.imageUrl!,
                 width: 70.0,
                 height: 70.0,
                 fit: BoxFit.fill,
@@ -33,7 +34,7 @@ class NewDestinationCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Danau Beratan Danauss Danau Beratan Danauss",
+                    destination.name!,
                     style: TextStyle(
                       fontSize: 18.0,
                       fontWeight: medium,
@@ -44,7 +45,7 @@ class NewDestinationCard extends StatelessWidget {
                     height: 6.0,
                   ),
                   Text(
-                    "Singajara",
+                    destination.city!,
                     style: TextStyle(
                       fontWeight: light,
                       color: secondaryColor,
@@ -62,7 +63,7 @@ class NewDestinationCard extends StatelessWidget {
                   size: 24.0,
                 ),
                 Text(
-                  "4.8",
+                  "${destination.rating}",
                   style: TextStyle(
                     fontWeight: medium,
                     color: darkColor,

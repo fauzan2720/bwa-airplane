@@ -42,10 +42,7 @@ class CheckoutSuccessView extends StatefulWidget {
             ),
             FozPrimaryButton(
               label: "My Bookings",
-              onPressed: () {
-                Get.back();
-                Get.back();
-              },
+              onPressed: () => controller.toMyBookings(),
               width: 220.0,
             ),
           ],

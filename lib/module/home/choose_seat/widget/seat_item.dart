@@ -1,10 +1,18 @@
 import 'package:airplane/core.dart';
+import 'package:airplane/cubit/seat_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SeatItem extends StatelessWidget {
-  const SeatItem({super.key, required this.status, this.size});
-  final int status;
-  final double? size;
+  const SeatItem({
+    super.key,
+    this.id,
+    this.isAvailable = true,
+    this.isSelectedRequest = false,
+  });
+  final String? id;
+  final bool isAvailable;
+  final bool isSelectedRequest;
 
   /*
     1. status 1 = available
@@ -14,30 +22,46 @@ class SeatItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: size ?? 48.0,
-      height: size ?? 48.0,
-      decoration: BoxDecoration(
-        color: status == 2 ? primaryColor : const Color(0xffE0D9FF),
-        borderRadius: BorderRadius.circular(size == null ? 15.0 : 6.0),
-        border: status == 1
-            ? Border.all(
-                width: size == null ? 2.0 : 1.0,
-                color: primaryColor,
-              )
-            : null,
-      ),
-      child: status == 2 && size == null
-          ? Center(
-              child: Text(
-                "YOU",
-                style: TextStyle(
-                  color: whiteColor,
-                  fontWeight: semibold,
+    bool isSelected;
+    if (id == null) {
+      isSelected = false;
+    } else {
+      isSelected = context.watch<SeatCubit>().isSelected(id!);
+    }
+
+    return GestureDetector(
+      onTap: () {
+        if (isAvailable) {
+          context.read<SeatCubit>().selcetSeat(id!);
+        }
+      },
+      child: Container(
+        width: id == null ? 16.0 : 48.0,
+        height: id == null ? 16.0 : 48.0,
+        decoration: BoxDecoration(
+          color: isSelected || isSelectedRequest
+              ? primaryColor
+              : const Color(0xffE0D9FF),
+          borderRadius: BorderRadius.circular(id == null ? 6.0 : 15.0),
+          border: isAvailable
+              ? Border.all(
+                  width: id == null ? 1.0 : 2.0,
+                  color: primaryColor,
+                )
+              : null,
+        ),
+        child: isSelected && id != null
+            ? Center(
+                child: Text(
+                  "YOU",
+                  style: TextStyle(
+                    color: whiteColor,
+                    fontWeight: semibold,
+                  ),
                 ),
-              ),
-            )
-          : const SizedBox(),
+              )
+            : const SizedBox(),
+      ),
     );
   }
 }

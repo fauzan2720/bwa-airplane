@@ -2,15 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
 class PhotoViewWidget extends StatelessWidget {
-  const PhotoViewWidget({super.key});
+  const PhotoViewWidget(this.photos, {super.key});
+  final List photos;
 
   @override
   Widget build(BuildContext context) {
-    List photos = [
-      "https://picsum.photos/1000",
-      "https://i.ibb.co/PGv8ZzG/me.jpg"
-    ];
-
     return PhotoViewGallery.builder(
       scrollPhysics: const BouncingScrollPhysics(),
       builder: (BuildContext context, int index) {

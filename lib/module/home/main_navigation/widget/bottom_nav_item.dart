@@ -1,22 +1,18 @@
+import 'package:airplane/cubit/page_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '/core.dart';
 import 'package:flutter/material.dart';
 
-class BottomNavItem extends StatefulWidget {
+class BottomNavItem extends StatelessWidget {
   const BottomNavItem({
     super.key,
     required this.index,
     required this.imageUrl,
-    required this.isActive,
   });
   final int index;
   final String imageUrl;
-  final bool isActive;
 
-  @override
-  State<BottomNavItem> createState() => _BottomNavItemState();
-}
-
-class _BottomNavItemState extends State<BottomNavItem> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -24,17 +20,18 @@ class _BottomNavItemState extends State<BottomNavItem> {
         const Spacer(),
         IconButton(
           onPressed: () {
-            MainNavigationController.instance.currentIndex = widget.index;
-            MainNavigationController.instance.setState(() {});
+            context.read<PageCubit>().setPage(index);
           },
           icon: ImageIcon(
-            AssetImage(widget.imageUrl),
+            AssetImage(imageUrl),
             size: 24.0,
-            color: widget.isActive ? primaryColor : secondaryColor,
+            color: context.read<PageCubit>().state == index
+                ? primaryColor
+                : secondaryColor,
           ),
         ),
         const Spacer(),
-        if (widget.isActive)
+        if (context.read<PageCubit>().state == index)
           Container(
             height: 2.0,
             width: 30.0,

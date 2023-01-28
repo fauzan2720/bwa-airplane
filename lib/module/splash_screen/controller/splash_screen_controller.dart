@@ -1,5 +1,9 @@
 import 'package:airplane/core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../cubit/auth_cubit.dart';
 
 class SplashScreenController extends State<SplashScreenView>
     implements MvcController {
@@ -19,7 +23,16 @@ class SplashScreenController extends State<SplashScreenView>
   void getInit() {
     Future.delayed(
       const Duration(milliseconds: 2500),
-      () => Get.put(const GetStartedView()),
+      () {
+        User? user = FirebaseAuth.instance.currentUser;
+
+        if (user == null) {
+          Get.put(const GetStartedView());
+        } else {
+          context.read<AuthCubit>().getCurrentUser(user.uid);
+          Get.put(const MainNavigationView());
+        }
+      },
     );
   }
 

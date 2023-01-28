@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:airplane/core.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../cubit/auth_cubit.dart';
 
 class BonusView extends StatefulWidget {
   const BonusView({Key? key}) : super(key: key);
@@ -27,7 +30,6 @@ class BonusView extends StatefulWidget {
                     blurRadius: 25.0,
                     offset: const Offset(0, 25),
                   ),
-                  //you can set more BoxShadow() here
                 ],
               ),
               child: Column(
@@ -36,25 +38,33 @@ class BonusView extends StatefulWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Name",
-                            style: TextStyle(
-                              fontWeight: light,
-                              color: whiteColor,
-                            ),
-                          ),
-                          Text(
-                            "Fauzan Abdillah",
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: medium,
-                              color: whiteColor,
-                            ),
-                          ),
-                        ],
+                      BlocBuilder<AuthCubit, AuthState>(
+                        builder: (context, state) {
+                          if (state is AuthSuccess) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Name",
+                                  style: TextStyle(
+                                    fontWeight: light,
+                                    color: whiteColor,
+                                  ),
+                                ),
+                                Text(
+                                  state.user.name,
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: medium,
+                                    color: whiteColor,
+                                  ),
+                                ),
+                              ],
+                            );
+                          } else {
+                            return const SizedBox();
+                          }
+                        },
                       ),
                       Row(
                         children: [

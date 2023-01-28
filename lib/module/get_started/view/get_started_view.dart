@@ -45,7 +45,7 @@ class GetStartedView extends StatefulWidget {
                 ),
                 FozPrimaryButton(
                   label: "Get Started",
-                  onPressed: () => Get.put(const SignUpView()),
+                  onPressed: () => Get.put(const SignInView()),
                   width: 220.0,
                 ),
                 const SizedBox(

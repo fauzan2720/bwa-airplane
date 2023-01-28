@@ -4,12 +4,16 @@
         "splash_screen",
         "get_started",
         "sign_up",
+        "sign_in",
         "bonus",
         "home/main_navigation",
         "home/home",
         "home/detail_destination",
         "home/choose_seat",
         "home/checkout",
-        "home/checkout_success"
+        "home/checkout_success",
+        "home/setting",
+        "home/my_card",
+        "home/transaction"
     ]
 }
