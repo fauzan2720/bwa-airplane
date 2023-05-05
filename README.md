@@ -38,6 +38,7 @@ Airplane adalah aplikasi pemesanan perjalanan yang memudahkan pengguna untuk men
 15.	dio: ^4.0.6
 16.	file_picker: ^5.2.5
 17.	image_picker: ^0.8.6+1
+18. flutter_animate: ^4.1.1+1
 
 ## Get App
 
