@@ -136,7 +136,7 @@ class SettingView extends StatefulWidget {
                                       ),
                                     ],
                                   ),
-                                ),
+                                ).animate().fadeIn(),
                               ),
                             ],
                           )

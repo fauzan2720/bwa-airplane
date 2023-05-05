@@ -7,10 +7,12 @@ class BookingDetailItem extends StatelessWidget {
     required this.title,
     required this.value,
     this.valueColor,
+    this.isSeat = false,
   });
   final String title;
   final String value;
   final Color? valueColor;
+  final bool isSeat;
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +40,17 @@ class BookingDetailItem extends StatelessWidget {
               ),
             ],
           ),
-          Text(
-            value,
-            style: TextStyle(
-              fontWeight: semibold,
-              color: valueColor ?? darkColor,
+          const SizedBox(
+            width: 50.0,
+          ),
+          Flexible(
+            child: Text(
+              value,
+              style: TextStyle(
+                fontWeight: semibold,
+                color: valueColor ?? darkColor,
+              ),
+              textAlign: TextAlign.end,
             ),
           ),
         ],

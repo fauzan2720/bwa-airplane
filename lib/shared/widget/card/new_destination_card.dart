@@ -19,13 +19,16 @@ class NewDestinationCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            ClipRRect(
-              borderRadius: radiusPrimary,
-              child: Image.network(
-                destination.imageUrl!,
-                width: 70.0,
-                height: 70.0,
-                fit: BoxFit.fill,
+            Hero(
+              tag: destination.id,
+              child: ClipRRect(
+                borderRadius: radiusPrimary,
+                child: Image.network(
+                  destination.imageUrl!,
+                  width: 70.0,
+                  height: 70.0,
+                  fit: BoxFit.fill,
+                ),
               ),
             ),
             SizedBox(
@@ -73,7 +76,7 @@ class NewDestinationCard extends StatelessWidget {
             )
           ],
         ),
-      ),
+      ).animate().fadeIn(delay: 100.ms),
     );
   }
 }

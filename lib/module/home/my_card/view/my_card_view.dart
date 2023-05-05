@@ -116,7 +116,7 @@ class MyCardView extends StatefulWidget {
               ),
             ],
           ),
-        ),
+        ).animate().scale(),
       ),
     );
   }

@@ -210,12 +210,18 @@ class ChooseSeatView extends StatefulWidget {
                               style: TextStyle(
                                   fontWeight: light, color: secondaryColor),
                             ),
-                            Text(
-                              state.isEmpty ? '-' : state.join(', '),
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: medium,
-                                color: darkColor,
+                            const SizedBox(
+                              width: 20.0,
+                            ),
+                            Flexible(
+                              child: Text(
+                                state.isEmpty ? '-' : state.join(', '),
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: medium,
+                                  color: darkColor,
+                                ),
+                                textAlign: TextAlign.end,
                               ),
                             ),
                           ],
@@ -251,23 +257,27 @@ class ChooseSeatView extends StatefulWidget {
                   FozPrimaryButton(
                     label: "Continue to Checkout",
                     onPressed: () {
-                      double vat = 45 / 100;
-                      int price = destination.price! * state.length;
-                      double grandTotal = price + (price * vat);
+                      if (state.isNotEmpty) {
+                        double vat = 45 / 100;
+                        int price = destination.price! * state.length;
+                        double grandTotal = price + (price * vat);
 
-                      Get.put(
-                        CheckoutView(
-                          TransactionModel(
-                            destination: destination,
-                            amountOfTraveler: state.length,
-                            selectedSeats: state.join(', '),
-                            vat: vat,
-                            price: price,
-                            grandTotal: grandTotal.toInt(),
-                            insurance: true,
+                        Get.put(
+                          CheckoutView(
+                            TransactionModel(
+                              destination: destination,
+                              amountOfTraveler: state.length,
+                              selectedSeats: state.join(', '),
+                              vat: vat,
+                              price: price,
+                              grandTotal: grandTotal.toInt(),
+                              insurance: true,
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      } else {
+                        showError(message: "Pilih kursimu terlebih dahulu");
+                      }
                     },
                   ),
                 ],

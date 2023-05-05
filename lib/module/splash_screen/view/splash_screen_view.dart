@@ -32,7 +32,7 @@ class SplashScreenView extends StatefulWidget {
             ),
           ],
         ),
-      ),
+      ).animate().scale(),
     );
   }
 

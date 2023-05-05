@@ -74,5 +74,6 @@ export 'package:airplane/shared/widget/text_field/form_dropdown.dart';
 export 'package:airplane/shared/widget/text_field/form_image_picker.dart';
 export 'package:airplane/shared/widget/text_field/input_password.dart';
 export 'package:airplane/shared/widget/text_field/input_text.dart';
+export 'package:flutter_animate/flutter_animate.dart';
 export 'state_util.dart';
 export 'setup.dart';

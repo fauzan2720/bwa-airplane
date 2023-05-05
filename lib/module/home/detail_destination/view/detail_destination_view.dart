@@ -12,11 +12,14 @@ class DetailDestinationView extends StatefulWidget {
       body: SingleChildScrollView(
         child: Stack(
           children: [
-            Image.network(
-              destination.imageUrl!,
-              width: Get.width,
-              height: 450.0,
-              fit: BoxFit.cover,
+            Hero(
+              tag: destination.id,
+              child: Image.network(
+                destination.imageUrl!,
+                width: Get.width,
+                height: 450.0,
+                fit: BoxFit.cover,
+              ),
             ),
             Container(
               margin: const EdgeInsets.only(top: 30.0),
@@ -138,8 +141,11 @@ class DetailDestinationView extends StatefulWidget {
                               children: destination.photos!
                                   .map(
                                     (e) => InkWell(
-                                      onTap: () => Get.to(
-                                          PhotoViewWidget(destination.photos!)),
+                                      onTap: () => Get.to(PhotoViewWidget(
+                                        currentIndex:
+                                            destination.photos!.indexOf(e),
+                                        photos: destination.photos!,
+                                      )),
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 8.0),

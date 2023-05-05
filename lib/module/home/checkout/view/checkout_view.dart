@@ -1,4 +1,5 @@
 import 'package:airplane/cubit/auth_cubit.dart';
+import 'package:airplane/cubit/seat_cubit.dart';
 import 'package:airplane/cubit/transaction_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:airplane/core.dart';
@@ -88,13 +89,16 @@ class CheckoutView extends StatefulWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ClipRRect(
-                          borderRadius: radiusPrimary,
-                          child: Image.network(
-                            transaction.destination.imageUrl!,
-                            width: 70.0,
-                            height: 70.0,
-                            fit: BoxFit.fill,
+                        Hero(
+                          tag: transaction.destination.id,
+                          child: ClipRRect(
+                            borderRadius: radiusPrimary,
+                            child: Image.network(
+                              transaction.destination.imageUrl!,
+                              width: 70.0,
+                              height: 70.0,
+                              fit: BoxFit.fill,
+                            ),
                           ),
                         ),
                         SizedBox(
@@ -326,6 +330,7 @@ class CheckoutView extends StatefulWidget {
                       context
                           .read<TransactionCubit>()
                           .createTransaction(transaction);
+                      context.read<SeatCubit>().clearSeat();
                     },
                   );
                 },

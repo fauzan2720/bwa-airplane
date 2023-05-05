@@ -14,37 +14,36 @@ class TransactionView extends StatefulWidget {
         title: const Text("Transaction"),
         actions: const [],
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.only(bottom: 100.0),
-          child: BlocBuilder<TransactionCubit, TransactionState>(
-            builder: (context, state) {
-              if (state is TransactionLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
+      body: Container(
+        margin: const EdgeInsets.only(bottom: 100.0),
+        child: BlocBuilder<TransactionCubit, TransactionState>(
+          builder: (context, state) {
+            if (state is TransactionLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (state is TransactionSuccess) {
+              if (state.transactions.isEmpty) {
+                return SizedBox(
+                  height: Get.height - 200.0,
+                  child: const Center(
+                    child: Text("No Transaction"),
+                  ),
                 );
-              } else if (state is TransactionSuccess) {
-                if (state.transactions.isEmpty) {
-                  return SizedBox(
-                    height: Get.height - 200.0,
-                    child: const Center(
-                      child: Text("No Transaction"),
-                    ),
-                  );
-                } else {
-                  return Column(
-                    children: state.transactions
-                        .map((e) => TransactionCard(e))
-                        .toList(),
-                  );
-                }
               } else {
-                return const Center(
-                  child: Text("No Transaction"),
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: state.transactions.length,
+                  itemBuilder: (context, index) =>
+                      TransactionCard(state.transactions[index]),
                 );
               }
-            },
-          ),
+            } else {
+              return const Center(
+                child: Text("No Transaction"),
+              );
+            }
+          },
         ),
       ),
     );

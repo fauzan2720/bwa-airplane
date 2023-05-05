@@ -27,7 +27,7 @@ class GetStartedView extends StatefulWidget {
                     color: whiteColor,
                     fontWeight: semibold,
                   ),
-                ),
+                ).animate().fadeIn(delay: 250.ms),
                 const SizedBox(
                   height: 10.0,
                 ),
@@ -38,8 +38,7 @@ class GetStartedView extends StatefulWidget {
                     fontWeight: light,
                     color: whiteColor,
                   ),
-                  textAlign: TextAlign.center,
-                ),
+                ).animate().fadeIn(delay: 500.ms),
                 const SizedBox(
                   height: 50.0,
                 ),
@@ -47,7 +46,7 @@ class GetStartedView extends StatefulWidget {
                   label: "Get Started",
                   onPressed: () => Get.put(const SignInView()),
                   width: 220.0,
-                ),
+                ).animate().fadeIn(delay: 750.ms),
                 const SizedBox(
                   height: 80.0,
                 ),

@@ -21,13 +21,16 @@ class TransactionCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ClipRRect(
-                borderRadius: radiusPrimary,
-                child: Image.network(
-                  transaction.destination.imageUrl!,
-                  width: 70.0,
-                  height: 70.0,
-                  fit: BoxFit.fill,
+              Hero(
+                tag: transaction.destination.id,
+                child: ClipRRect(
+                  borderRadius: radiusPrimary,
+                  child: Image.network(
+                    transaction.destination.imageUrl!,
+                    width: 70.0,
+                    height: 70.0,
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
               SizedBox(
@@ -130,6 +133,6 @@ class TransactionCard extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ).animate().fadeIn(delay: 100.ms);
   }
 }

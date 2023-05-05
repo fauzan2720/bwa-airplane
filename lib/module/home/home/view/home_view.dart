@@ -138,10 +138,12 @@ class HomeView extends StatefulWidget {
                   if (state is DestinationSuccess) {
                     state.destinations.sort((a, b) => a.id.compareTo(b.id));
 
-                    return Column(
-                      children: state.destinations.map((e) {
-                        return NewDestinationCard(e);
-                      }).toList(),
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: state.destinations.length,
+                      itemBuilder: (context, index) =>
+                          NewDestinationCard(state.destinations[index]),
                     );
                   }
 

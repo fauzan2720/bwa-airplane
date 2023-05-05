@@ -90,7 +90,7 @@ class PopularDestinationCard extends StatelessWidget {
             ),
           ],
         ),
-      ),
+      ).animate().fadeIn(delay: 100.ms),
     );
   }
 }
